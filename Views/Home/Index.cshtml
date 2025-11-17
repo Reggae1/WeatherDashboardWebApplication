@@ -1,0 +1,73 @@
+﻿@model WeatherDashboard.Models.WeatherViewModel
+@{
+    ViewData["Title"] = "Weather Dashboard";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h1 class="mb-4">🌤 Weather Dashboard</h1>
+
+            @if (TempData["History"] is List<string> historyList && historyList.Count > 0)
+            {
+                <div class="mb-3">
+                    <h5>Recent Searches:</h5>
+                    <ul class="list-group">
+                        @foreach (var city in historyList)
+                        {
+                            <li class="list-group-item">@city</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <form method="post" class="input-group mb-3">
+                <input type="text" name="city" class="form-control" placeholder="Enter city name" required />
+                <button class="btn btn-primary" type="submit">Get Weather</button>
+            </form>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            @if (Model != null)
+            {
+                <div class="card shadow-sm mt-4">
+                    <div class="card-body">
+                        <h4 class="card-title">@Model.City, @Model.Country</h4>
+                        @* <img src="data:image/png;base64,PGh0bWw+DQo8aGVhZD48dGl0bGU+NDA0IE5vdCBGb3VuZDwvdGl0bGU+PC9oZWFkPg0KPGJvZHk+DQo8Y2VudGVyPjxoMT40MDQgTm90IEZvdW5kPC9oMT48L2NlbnRlcj4NCjxocj48Y2VudGVyPm5naW54LzEuMjQuMDwvY2VudGVyPg0KPC9ib2R5Pg0KPC9odG1sPg0K" *@
+                             @* alt="icon" /> *@
+                        <p class="card-text"><strong>Temperature:</strong> @Model.Temperature °C</p>
+                        <p class="card-text"><strong>Weather:</strong> @Model.Description</p>
+                        <p class="card-text"><strong>Humidity:</strong> @Model.Humidity%</p>
+                        <p class="card-text"><strong>Wind Speed:</strong> @Model.WindSpeed m/s</p>
+                    </div>
+                </div>
+            }
+            @if (Model != null && Model.Forecasts?.Count > 0)
+            {
+                <div class="mt-4">
+                    <h4>5-Day Forecast</h4>
+                    <div class="row">
+                        @foreach (var forecast in Model.Forecasts)
+                        {
+                            <div class="col-md-2 col-6 mb-3">
+                                <div class="card text-center shadow-sm">
+                                    <div class="card-body p-2">
+                                        <strong>@forecast.Date</strong><br />
+                                        @* <img src="data:image/png;base64,PGh0bWw+DQo8aGVhZD48dGl0bGU+NDA0IE5vdCBGb3VuZDwvdGl0bGU+PC9oZWFkPg0KPGJvZHk+DQo8Y2VudGVyPjxoMT40MDQgTm90IEZvdW5kPC9oMT48L2NlbnRlcj4NCjxocj48Y2VudGVyPm5naW54LzEuMjQuMDwvY2VudGVyPg0KPC9ib2R5Pg0KPC9odG1sPg0K" alt="weather icon" /> *@
+                                        <p class="mb-0">@forecast.Temp °C</p>
+                                        <small>@forecast.Description</small>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+}
+        </div>
+    </div>
+</div>
